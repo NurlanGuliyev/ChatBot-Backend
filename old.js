@@ -1,5 +1,5 @@
 import express from 'express';
-import openai from './config/openai.js';
+import openai from './helper/openai.js';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import axios from 'axios';
