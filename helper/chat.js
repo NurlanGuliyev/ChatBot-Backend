@@ -47,7 +47,7 @@ export const createRun = async (threadId) => {
         tool_choice: 'auto'
     });
 
-    console.log('Run created and polled:', run.status);
+    console.log('Run created and polled:', result.status);
 
     return result;
 }

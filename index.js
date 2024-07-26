@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { createMessage, createRun, createThread, getThreadMessages } from './helper/chat.js';
+import { createMessage, createRun, createThread, getThreadMessages, isRunSuccessful } from './helper/chat.js';
 
 dotenv.config();
 
@@ -34,6 +34,7 @@ app.post('/api/chat', async (req, res) => {
             return res.status(500).json({ error: 'Run did not complete' });
 
         result = await getThreadMessages(run)
+        
     } catch (error) {
         return res.status(500).json({ error: `An error occurred: ${error.message}` });
     }
