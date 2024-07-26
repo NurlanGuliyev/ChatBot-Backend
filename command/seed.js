@@ -5,7 +5,7 @@ const WRITE_FILE = 'amenities.json';
 
 const REQUEST_PAGE_SIZE = 100;
 
-const REQUEST_URL = 'https://metarealtyinc.ca/wp-json/wp/v2/amenities?per_page=<per_page>&page=<page>';
+const REQUEST_URL = 'c6698073e0.nxcli.io/wp-json/wp/v2/amenities?per_page=<per_page>&page=<page>';
 
 const fetchAllPages = async () => {
   let page = 1;
