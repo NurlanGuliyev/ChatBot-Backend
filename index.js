@@ -40,6 +40,7 @@ app.post('/api/chat', async (req, res) => {
     }
 
     return res.json({ messages: result });
+    console.log("Hello World!");
 });
 
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
