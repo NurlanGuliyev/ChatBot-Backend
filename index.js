@@ -1,7 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { createMessage, createRun, createThread, getThreadMessages, isRunSuccessful } from './helper/chat.js';
+import { createMessage, createRun, createThread, getThreadMessages, isRunSuccessful, handleBackendMessage } from './helper/chat.js';
 
 dotenv.config();
 
@@ -17,7 +17,6 @@ const clientSessions = {};
 
 app.post('/api/chat', async (req, res) => {
     const { message, clientId } = req.body;
-
     let result;
 
     if (!message || !clientId) 
@@ -33,7 +32,19 @@ app.post('/api/chat', async (req, res) => {
         if (!isRunSuccessful(run)) 
             return res.status(500).json({ error: 'Run did not complete' });
 
-        result = await getThreadMessages(run)
+        const threadMessages = await getThreadMessages(run);
+
+        // Check if any message contains "FOR BACKEND" and process it
+        for (let msg of threadMessages) {
+            const backendResponse = await handleBackendMessage(msg.content);
+            if (backendResponse) {
+                // Inject the backend response as a user message
+                await createMessage(threadId, backendResponse);
+            }
+        }
+
+        // Retrieve the latest messages after processing backend messages
+        result = await getThreadMessages(run);
         
     } catch (error) {
         return res.status(500).json({ error: `An error occurred: ${error.message}` });
@@ -41,6 +52,7 @@ app.post('/api/chat', async (req, res) => {
 
     return res.json({ messages: result });
 });
+
 
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
 
